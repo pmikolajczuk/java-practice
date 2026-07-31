@@ -1,8 +1,8 @@
 package pl.mikolaj.javapractice.sort;
 
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class SortTestUtils {
     private static final int SIZE = 100;
@@ -11,15 +11,37 @@ public class SortTestUtils {
     public static boolean sortTest(Consumer<int[]> sort) {
         int[] numbers = generateInput();
         System.out.println("Input: " + Arrays.toString(numbers));
+
+        Map<Integer, Long> inputCounts = createCountsMap(numbers);
+        System.out.println("InputNumber2Count: " + inputCounts);
+
         sort.accept(numbers);
         System.out.println("Output: " + Arrays.toString(numbers));
-        return isSorted(numbers);
+
+        Map<Integer, Long> outputCounts = createCountsMap(numbers);
+        System.out.println("OutputNumber2Count: " + outputCounts);
+
+        return hasSameValues(inputCounts, outputCounts) && isSorted(numbers);
     }
 
     private static int[] generateInput() {
         return new Random()
                 .ints(SIZE, 0, BOUND)
                 .toArray();
+    }
+
+    private static Map<Integer, Long> createCountsMap(int[] numbers) {
+        return Arrays
+                .stream(numbers)
+                .boxed()
+                .collect(Collectors.groupingBy(integer -> integer, Collectors.counting()));
+    }
+
+    private static boolean hasSameValues(
+            Map<Integer, Long> inputNumber2Count,
+            Map<Integer, Long> outputNumber2Count
+    ) {
+        return Objects.equals(inputNumber2Count, outputNumber2Count);
     }
 
     private static boolean isSorted(int[] numbers) {
