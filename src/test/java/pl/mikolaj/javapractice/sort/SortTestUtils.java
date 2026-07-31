@@ -13,13 +13,13 @@ public class SortTestUtils {
         System.out.println("Input: " + Arrays.toString(numbers));
 
         Map<Integer, Long> inputCounts = createCountsMap(numbers);
-        System.out.println("InputNumber2Count: " + inputCounts);
+        System.out.println("InputCounts: " + inputCounts);
 
         sort.accept(numbers);
         System.out.println("Output: " + Arrays.toString(numbers));
 
         Map<Integer, Long> outputCounts = createCountsMap(numbers);
-        System.out.println("OutputNumber2Count: " + outputCounts);
+        System.out.println("OutputCounts: " + outputCounts);
 
         return hasSameValues(inputCounts, outputCounts) && isSorted(numbers);
     }
@@ -38,10 +38,10 @@ public class SortTestUtils {
     }
 
     private static boolean hasSameValues(
-            Map<Integer, Long> inputNumber2Count,
-            Map<Integer, Long> outputNumber2Count
+            Map<Integer, Long> inputCounts,
+            Map<Integer, Long> outputCounts
     ) {
-        return Objects.equals(inputNumber2Count, outputNumber2Count);
+        return Objects.equals(inputCounts, outputCounts);
     }
 
     private static boolean isSorted(int[] numbers) {
