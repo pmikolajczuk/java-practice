@@ -5,8 +5,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class SortTestUtils {
-    private static final int SIZE = 100;
-    private static final int BOUND = 100;
+    private static final int SIZE = 1_000;
+    private static final int BOUND = 1_000;
 
     public static boolean sortTest(Consumer<int[]> sort) {
         int[] numbers = generateInput();
@@ -23,6 +23,15 @@ public class SortTestUtils {
 
         return hasSameValues(inputCounts, outputCounts) && isSorted(numbers);
     }
+
+    public static boolean sortTestSilent(Consumer<int[]> sort) {
+        int[] numbers = generateInput();
+        Map<Integer, Long> inputCounts = createCountsMap(numbers);
+        sort.accept(numbers);
+        Map<Integer, Long> outputCounts = createCountsMap(numbers);
+        return hasSameValues(inputCounts, outputCounts) && isSorted(numbers);
+    }
+
 
     private static int[] generateInput() {
         return new Random()
