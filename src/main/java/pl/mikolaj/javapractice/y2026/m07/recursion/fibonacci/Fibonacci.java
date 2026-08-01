@@ -7,18 +7,22 @@ import java.util.function.Function;
 public class Fibonacci {
     private final Map<Integer, Long> cache = new HashMap<>();
 
+    //create a closure that contains localCache
+    private final Function<Integer, Long> memoizeFibonacciFast = memoizeFn(this::fibonacciFast);
+
     public long fibonacciFast(int n) {
         if (n == 1) return 0;
         if (n == 2) return 1;
-        return memoizeFn(this::fibonacciFast).apply(n - 1) + memoizeFn(this::fibonacciFast).apply(n - 2);
+        return memoizeFibonacciFast.apply(n - 1) + memoizeFibonacciFast.apply(n - 2);
     }
 
-    private Function<Integer, Long> memoizeFn(Function<Integer, Long> fn) {
-        return n -> {
-            Long result = cache.get(n);
+    private <T, R> Function<T, R> memoizeFn(Function<T, R> fn) {
+        Map<T, R> localCache = new HashMap<>();
+        return t -> {
+            R result = localCache.get(t);
             if (result == null) {
-                result = fn.apply(n);
-                cache.put(n, result);
+                result = fn.apply(t);
+                localCache.put(t, result);
             }
             return result;
         };
